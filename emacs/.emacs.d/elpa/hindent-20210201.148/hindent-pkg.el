@@ -1,2 +1,0 @@
-;;; Generated package description from hindent-20210201.148/hindent.el  -*- no-byte-compile: t -*-
-(define-package "hindent" "20210201.148" "Indent haskell code using the \"hindent\" program" '((cl-lib "0.5")) :commit "4c2ea034f4365cd784539f223282907c9e734fba" :authors '(("Chris Done" . "chrisdone@gmail.com")) :maintainer '("Chris Done" . "chrisdone@gmail.com") :url "https://github.com/chrisdone/hindent")

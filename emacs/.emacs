@@ -1,67 +1,68 @@
-(load-file "~/.emacs.rc/rc.el")
+					; custom functions
+(defun kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer
+          (delq (current-buffer)
+                (remove-if-not 'buffer-file-name (buffer-list)))))
 
-(require 'crystal-mode)
-(require 'ido-completing-read+)
-(require 'web-mode)
-
-(setq backup-directory-alist '(("." . "~/.emacs-backups")))
 (setq custom-file "~/.emacs.custom.el")
 
-(set-frame-font "Hack 10" nil t)
+(setq package-archives
+      '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
+	("MELPA"        . "https://melpa.org/packages/")
+	("ORG"          . "https://orgmode.org/elpa/")
+	("MELPA Stable" . "https://stable.melpa.org/packages/")
+	("nongnu"       . "https://elpa.nongnu.org/nongnu/"))
+      package-archive-priorities
+      '(("GNU ELPA"     . 20)
+	("MELPA"        . 15)
+	("ORG"          . 10)
+	("MELPA Stable" . 5)
+	("nongnu"       . 0)))
 
-;(rc/require-theme 'gruvbox)
+(package-initialize)
 
-(menu-bar-mode 0)
+(set-face-attribute 'default nil :font "Hack" :height 160)
+
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (global-display-line-numbers-mode 1)
+(show-paren-mode 1)
+(setq inhibit-startup-screen 0)
+(menu-bar-mode 0)
 
-(rc/require 'smex 'ido-completing-read+)
+(global-set-key (kbd "C-x C-b") 'kill-other-buffers)
+
+					; packages
+
+(require 'gruvbox-theme)
+
+(load-theme 'gruvbox-dark-soft)
+
+(require 'company)
+
+(global-company-mode)
+
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (interactive)
+            (company-mode 0)))
+
+(require 'yasnippet)
+
+(yas-global-mode 1)
+
+(require 'ido-completing-read+)
 
 (ido-mode 1)
 (ido-everywhere 1)
 (ido-ubiquitous-mode 1)
 
-(add-to-list 'load-path "~/.emacs.local")
+(require 'dired-x)
 
-(require 'simpc-mode)
-(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
-
-(setq web-mode-markup-indent-offset 2
-      web-mode-code-indent-offset 2
-      web-mode-css-indent-offset 2
-      web-mode-enable-auto-quoting nil ;; Disable automatic quoting of attributes
-      web-mode-enable-css-colorization t)
-
-(add-to-list 'auto-mode-alist '("\\.[jt]s[x]?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.cr\\'" . crystal-mode))
-
-(use-package company
-  :ensure t
-  :config
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0) ;; Immediate suggestions
-  (add-hook 'web-mode-hook 'company-mode)
-  (add-hook 'crystal-mode-hook 'company-mode))
-
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1)
-  (add-hook 'web-mode-hook 'yas-minor-mode)
-  (add-hook 'crystal-mode-hook 'yas-minor-mode))
-
-(defun my-web-mode-setup ()
-  "Custom setup for web-mode."
-  (company-mode +1)
-  (yas-minor-mode +1))
-(add-hook 'web-mode-hook 'my-web-mode-setup)
-
-;; Custom setup for crystal-mode
-(defun my-crystal-mode-setup ()
-  "Custom setup for crystal-mode."
-  (company-mode -1)
-  (yas-minor-mode +1))
-(add-hook 'crystal-mode-hook 'my-crystal-mode-setup)
-
-(load-file custom-file)
+(setq dired-omit-files
+      (concat dired-omit-files "\\|^\\..+$"))
+(setq-default dired-dwim-target t)
+(setq dired-listing-switches "-alh")
+(setq dired-mouse-drag-files t)
