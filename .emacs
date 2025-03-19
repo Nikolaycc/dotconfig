@@ -66,3 +66,13 @@
 (setq-default dired-dwim-target t)
 (setq dired-listing-switches "-alh")
 (setq dired-mouse-drag-files t)
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; Add this to your init.el
+(setq treesit-language-source-alist
+   '((elixir "https://github.com/elixir-lang/tree-sitter-elixir")
+     (heex "https://github.com/phoenixframework/tree-sitter-heex")))
+
+;; Then run this command to install the grammars
+;; M-x treesit-install-language-grammar RET elixir RET
+;; M-x treesit-install-language-grammar RET heex RET
