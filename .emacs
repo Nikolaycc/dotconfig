@@ -23,8 +23,9 @@
 
 (package-initialize)
 
-(set-face-attribute 'default nil :font "Hack" :height 160)
+;(set-face-attribute 'default nil :font "Hack" :height 160)
 
+(setq make-backup-files nil) ; stop creating ~ files
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (global-display-line-numbers-mode 1)
@@ -36,9 +37,15 @@
 
 					; packages
 
-(require 'gruvbox-theme)
+(add-to-list 'load-path "/home/nikolaycc/.emacs.local")
+;; Importing simpc-mode
+(require 'simpc-mode)
+;; Automatically enabling simpc-mode on files with extensions like .h, .c, .cpp, .hpp
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
-(load-theme 'gruvbox-dark-soft)
+(require 'peacock-theme)
+
+(load-theme 'gruber-darker)
 
 (require 'company)
 
